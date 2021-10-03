@@ -1,15 +1,15 @@
 // Core
-import { ApolloError } from 'apollo-server-express';
+import {ApolloError} from 'apollo-server-express';
 
 // Model
-import { getBooks, getBookById } from './model';
+import {getBooks, getBookById} from './model';
 
 export const queries = {
     books: () => getBooks(),
-    book: (_, { id }) => {
+    book: (_, {id}) => {
         try {
             return getBookById(id);
-        } catch ({ message }) {
+        } catch ({message}) {
             throw new ApolloError(message);
         }
     }

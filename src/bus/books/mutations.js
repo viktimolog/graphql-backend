@@ -1,14 +1,27 @@
 // Model
-import { saveBook, removeBook, updateBook } from './model';
+import {saveBook, removeBook, updateBook} from './model';
+
+import {pubSub} from '../../init/pubSub';
+import {events} from './events';
 
 export const mutations = {
-    addBook: (_, { book }) => {
-        return saveBook(book);
+    addBook: (_, {book}) => {
+        const savedBook = saveBook(book);
+        pubSub.publish(events.BOOK_ADDED, {
+            book: savedBook
+        });
+
+        return savedBook;
     },
-    removeBook: (_, { id }) => {
+    removeBook: (_, {id}) => {
         return removeBook(id);
     },
-    updateBook: (_, { id, book }) => {
-        return updateBook(id, book);
+    updateBook: (_, {id, book}) => {
+        const updatedBook = updateBook(id, book);
+        pubSub.publish(events.BOOK_UPDATED, {
+            book: updatedBook
+        });
+
+        return updatedBook;
     }
 };
