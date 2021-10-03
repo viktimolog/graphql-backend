@@ -1,11 +1,11 @@
 // Core
-import { AuthenticationError } from 'apollo-server-express';
+import {AuthenticationError} from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
 
 // DB
-import { db } from './db';
+import {db} from './db';
 
-import { USER_SECRET } from '../../init/config';
+import {USER_SECRET} from '../../init/config';
 
 export const mutations = {
     signUp: (_, user) => {
@@ -13,21 +13,21 @@ export const mutations = {
 
         return user;
     },
-    login: (_, { name, password }, ctx) => {
+    login: (_, {name, password}, ctx) => {
         const user = db.find((currentUser) => currentUser.name === name);
         const message = 'Your credentials is wrong!';
 
-        if(!user) {
+        if (!user) {
             throw new AuthenticationError(message);
         }
 
         const isUserValid = user.password === password;
 
-        if(!isUserValid) {
+        if (!isUserValid) {
             throw new AuthenticationError(message);
         }
 
-        const token = jwt.sign({ username: name }, USER_SECRET);
+        const token = jwt.sign({username: name}, USER_SECRET);
         ctx.req.session.token = token;
 
         return user;
